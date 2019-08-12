@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    NOTICE:
+
+    This context is usually accessed via authenticated callers on the sip profile on port 5060
+    or transfered callers from the public context which arrived via the sip profile on port 5080.
+
+    Authenticated users will use the user_context variable on the user to determine what context
+    they can access.  You can also add a user in the directory with the cidr= attribute acl.conf.xml
+    will build the domains ACL using this value.
+-->
+<!-- http://wiki.freeswitch.org/wiki/Dialplan_XML -->
+<include>
+  <context name="MGCP">
+
+    <extension name="ivr_tjdft">
+      <condition field="destination_number" expression="^(4010)$|^(7600)$">
+        <action application="set" data="default_language=pt"/>
+        <action application="log" data="INFO CHAMADA PARA CENTRAL DE SERVIÇO"/>
+        <action application="answer"/>
+        <action application="sleep" data="2000"/>
+        <action application="set" data="caller_id_name=CENTRAL DE ATENDIMENTO"/>
+	<!-- <action application="ivr" data="CENTRAL"/> -->
+        <action application="playback" data="/usr/src/TJDFT/0009.wav"/>
+        <action application="callcenter" data="TECNOLOGIA"/>
+      </condition>
+    </extension>
+
+    <extension name="blacklist_check">
+        <condition field="${blacklist(check coorpre ${destination_number})}" expression="^true$">
+            <action application="set" data="hangup_after_bridge=true"/>
+            <action application="answer"/>
+            <action application="sleep" data="1000"/>
+            <action application="playback" data="/usr/src/TJDFT/ann02.wav"/>
+            <action application="hangup" data="NORMAL_CLEARING"/>
+        </condition>
+    </extension>
+
+  </context>
+</include>
