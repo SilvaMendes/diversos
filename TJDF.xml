@@ -22,6 +22,7 @@
         <action application="set" data="caller_id_name=CENTRAL DE ATENDIMENTO"/>
 	<!-- <action application="ivr" data="CENTRAL"/> -->
         <action application="playback" data="/usr/src/TJDFT/0009.wav"/>
+	<action application="limit" data="hash outbound ivr_8505 1"/>
         <action application="callcenter" data="TECNOLOGIA"/>
       </condition>
     </extension>
@@ -35,6 +36,12 @@
             <action application="hangup" data="NORMAL_CLEARING"/>
         </condition>
     </extension>
-
+	  
+    <extension name="limit_exceeded">
+       <condition field="destination_number" expression="^limit_exceeded$">
+           <action application="deflect" data="sip:9900@172.17.118.34"/>
+       </condition>
+    </extension>
+	  
   </context>
 </include>
