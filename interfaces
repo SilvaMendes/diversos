@@ -63,3 +63,29 @@ iface bond1 inet static
         bond-updelay 800
         bond-downdelay 400
         bond_xmit_hash_policy layer2+3    # optional, sets the bonding algorithm
+	
+	
+	
+	
+	
+	
+	Edit /etc/modules and add bonding mode=4 miimon=100 max_bonds=2. This will load the module at boot time in the future. The value of max_bonds is the number of bonding devices your system will have. The default is 1.
+Load the module, so we can proceed. modprobe bonding. There should be no errors. Confirm it is loaded with modprobe -l | grep bond
+Edit /etc/network/interfaces to look something like this:
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+auto  bond0
+iface bond0 inet static
+    address     192.168.1.131
+    gateway     192.168.1.1
+    broadcast   192.168.1.255
+    netmask     255.255.255.0
+    up   /sbin/ifenslave    bond0 eth0 eth1 eth2 eth3
+    down /sbin/ifenslave -d bond0 eth0 eth1 eth2 eth3
+
+#similar configuration for bond1
+
+
