@@ -36,3 +36,30 @@ iface bond0 inet static
 	network 192.168.122.0
 	broadcast 192.168.122.255
 	gateway 192.168.122.1
+
+
+
+
+auto enp4s0f2
+allow-hotplug enp4s0f2
+iface enp4s0f2 inet manual
+        bond-master bond1
+        bond-mode 4
+
+auto enp4s0f3
+allow-hotplug enp4s0f3
+iface enp4s0f3 inet manual
+        bond-master bond1
+        bond-mode 4
+
+auto bond1
+iface bond1 inet static
+        address 1.2.3.4
+        netmask 255.255.255.0
+        bond-mode 4
+        bond-slaves none
+        bond-miimon 100
+        bond-lacp-rate 1
+        bond-updelay 800
+        bond-downdelay 400
+        bond_xmit_hash_policy layer2+3    # optional, sets the bonding algorithm
