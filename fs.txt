@@ -1,0 +1,62 @@
+!/bin/sh
+
+apt install -y automake binutils-dev build-essential doxygen libncurses5-dev zlib1g-dev expat libtiff-tools libx11-dev unixodbc unixodbc-dev libssl-dev python-dev libzrtpcpp-dev libtool  libtool-bin libjpeg-dev sqlite3 libsqlite3-dev libpng++-dev curl libfreetype6 libfreetype6-dev libcurl4-openssl-dev libpcre3-dev libpq-dev libspeex-dev libspeexdsp-dev libldns-dev uuid-dev libedit-dev libtiff5-dev liblua5.2-dev libopus-dev libavformat-dev libavcodec-extra libx264-dev libperl-dev libsctp-dev libjpeg62-turbo-dev ntpdate libfreetype6-dev git-buildpackage yasm gdb git autoconf wget perl libgdbm-dev libdb-dev bison pkg-config ccache  libpng12-dev libopenal-dev liblua5.2-dev libsndfile-dev memcached libmemcached-dev devscripts gawk g++ git-core make postgresql-9.4 postgresql-contrib-9.4 postgresql-client-9.4 odbc-postgresql php5-common php5-cli php5-json php5-memcached php5-memcache php5-cgi php5-dev php5-curl php5-odbc php5-pgsql libshout3-dev libmpg123-0 libmpg123-dev libmp3lame-dev snmpd libsnmp-dev libopencv-dev gsm-utils libgsmme-dev usb-modeswitch-data usb-modeswitch gcj-jdk portaudio19-dev
+
+
+cd freeswitch
+./bootstrap.sh -j
+./configure -C --enable-portable-binary --enable-sctp\
+           --prefix=/usr --localstatedir=/var --sysconfdir=/etc \
+           --with-gnu-ld --with-openssl \
+           --enable-core-odbc-support --enable-zrtp \
+           --enable-core-pgsql-support --disable-silent-rules \
+           --enable-static-v8 --disable-parallel-build-v8 --enable-amr $@
+make
+make -j install
+
+mkdir /usr/share/freeswitch/sounds
+tar xvf Sound/freeswitch-sounds-music-8000-1.0.52.tar.gz -C /usr/share/freeswitch/sounds/ \
+&& tar xvf Sound/freeswitch-sounds-music-16000-1.0.52.tar.gz -C /usr/share/freeswitch/sounds/ \
+&& tar xvf Sound/freeswitch-sounds-music-32000-1.0.52.tar.gz -C /usr/share/freeswitch/sounds/ \
+&& tar xvf Sound/freeswitch-sounds-music-48000-1.0.52.tar.gz -C /usr/share/freeswitch/sounds/ \
+&& tar xvf Sound/freeswitch-sounds-pt-BR-karina-8000-1.0.51.tar.gz -C /usr/share/freeswitch/sounds/ \
+&& tar xvf Sound/freeswitch-sounds-pt-BR-karina-16000-1.0.51.tar.gz -C /usr/share/freeswitch/sounds/ \
+&& tar xvf Sound/freeswitch-sounds-pt-BR-karina-32000-1.0.51.tar.gz -C /usr/share/freeswitch/sounds/ \
+&& tar xvf Sound/freeswitch-sounds-pt-BR-karina-48000-1.0.51.tar.gz -C /usr/share/freeswitch/sounds/
+  
+	  
+groupadd -r freeswitch
+useradd -r freeswitch -d /home/freeswitch -s /bin/bash -g freeswitch
+freeswitch -u root -g root -c
+chown -R freeswitch:freeswitch  /etc/freeswitch/tls
+chown -R freeswitch:freeswitch  /var/lib/freeswitch
+chown -R freeswitch:freeswitch  /var/log/freeswitch
+
+mkdir /usr/src/freeswitch/libs/v8-6.1.298
+
+cp -r depot_tools/ /usr/src/freeswitch/libs/v8-6.1.298/
+cp -r v8/ /usr/src/freeswitch/libs/v8-6.1.298/
+
+
+
+
+apt-get install gsm-utils
+apt-get install libgsmme-dev
+apt-get install usb-modeswitch-data usb-modeswitch
+
+cd /usr/src/freeswitch/src/mod/endpoints/mod_gsmopen/libctb-0.16/build
+make DEBUG=0 GPIB=0
+make DEBUG=0 GPIB=0 install
+ldconfig
+
+
+ apt-get -y install build-essential subversion automake autoconf wget libtool libncurses5-dev libasound2-dev libgsmme-dev 
+ 
+ 
+ 
+ 
+su - postgres -l -c "psql -U postgres -d postgres -c \"ALTER USER postgres WITH ENCRYPTED PASSWORD 'Admin#123';\""
+su - postgres -l -c "psql -U postgres -d postgres -c \"CREATE DATABASE dbfswemake;\""
+su - postgres -l -c "psql -U postgres -d postgres -c \"CREATE ROLE admfs WITH SUPERUSER LOGIN PASSWORD 'root#123';\""
+su - postgres -l -c "psql -U postgres -d postgres -c \"GRANT ALL PRIVILEGES ON DATABASE dbfswemake to admfs;\""
+su - postgres -l -c "psql -U postgres -d postgres -c \"ALTER USER admsbc WITH PASSWORD 'root#123' CREATEDB CREATEUSER;\""
