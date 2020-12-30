@@ -1,0 +1,25 @@
+{
+    "name": "vendor/php-ari",
+    "description": "Description of project PhpAri.",
+    "authors": [
+        {
+            "name": "mendes",
+            "email": "your@email.here"
+        }
+    ],
+    "require": {
+        "amphp/amp": "dev-master",
+        "amphp/http-server": "dev-master",
+        "amphp/http-client": "dev-master",
+        "amphp/mysql": "dev-master",
+        "amphp/redis": "dev-master",
+        "amphp/parallel": "dev-master",
+        "amphp/websocket-server": "dev-master",
+        "amphp/postgres": "dev-master",
+        "amphp/socket": "dev-master",
+        "amphp/byte-stream": "dev-master",
+        "amphp/websocket-client": "dev-master",
+        "amphp/http-client-psr7": "dev-master",
+        "amphp/rpc": "dev-master"
+    }
+}
