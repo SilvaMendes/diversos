@@ -1,4 +1,4 @@
-## diversos
-..###Diversos arquivos meus estudos 
+#### diversos
+Diversos arquivos meus estudos 
 
 
